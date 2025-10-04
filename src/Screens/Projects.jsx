@@ -63,16 +63,6 @@ const projectsData = [
       year: 2025,
    },
    {
-      title: "Agency Website",
-      description:
-         "Modern agency template with services, case studies, and testimonial carousel.",
-      liveLink: "https://agenci-website-nu.vercel.app/",
-      repoLink: "https://github.com/Deepak-thakur-321/Agenci-Website",
-      category: "Landing Page",
-      tech: ["React", "TailwindCSS"],
-      year: 2025,
-   },
-   {
       title: "Gaming Website",
       description:
          "Interactive gaming front‑end with hover cards, match listings, and animated sections.",
@@ -110,26 +100,6 @@ const projectsData = [
       repoLink: "https://github.com/Deepak-thakur-321/bookmark-extension",
       category: "Browser Extension",
       tech: ["JavaScript", "Chrome APIs"],
-      year: 2024,
-   },
-   {
-      title: "Flutter Landing Page",
-      description:
-         "Product landing promoting a Flutter app with features grid and CTA sections.",
-      liveLink: "https://flutter-landing-page-phi.vercel.app/",
-      repoLink: "https://github.com/Deepak-thakur-321/Flutter-landing-page",
-      category: "Landing Page",
-      tech: ["React", "TailwindCSS"],
-      year: 2024,
-   },
-   {
-      title: "Microsoft Landing Page",
-      description:
-         "Microsoft‑inspired layout with modular sections and enterprise visual language.",
-      liveLink: "https://deepak-thakur-321.github.io/microsoft/",
-      repoLink: "https://github.com/Deepak-thakur-321/microsoft",
-      category: "Landing Page",
-      tech: ["React", "TailwindCSS"],
       year: 2024,
    },
    {
