@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect, useRef } from "react";
 import { FaExternalLinkAlt, FaGithub, FaSearch, FaFilter } from "react-icons/fa";
 
 const projectsData = [
@@ -11,6 +11,7 @@ const projectsData = [
       category: "AI Web App",
       tech: ["React", "Tailwind", "Node.js", "Express", "MongoDB", "Gemini API"],
       year: 2025,
+      priority: 1,
    },
    {
       title: "Perplexity (AI Web App)",
@@ -21,49 +22,10 @@ const projectsData = [
       category: "AI Web App",
       tech: ["React", "Tailwind", "Node.js", "Express", "MongoDB", "Gemini API"],
       year: 2025,
+      priority: 2,
    },
    {
-      title: "Job Application Tracker",
-      description:
-         "A simple tracker to manage job applications with filters, statuses, and progress tracking.",
-      liveLink: "https://job-application-tracker-virid.vercel.app/",
-      repoLink: "https://github.com/Deepak-thakur-321/Job-Application-Tracker",
-      category: "Productivity Tool",
-      tech: ["React", "Tailwind", "LocalStorage / MongoDB"],
-      year: 2025,
-   },
-   {
-      title: "E‑commerce Platform",
-      description:
-         "Full‑stack style front‑end with product gallery, filters, cart, and checkout flow. Focus on performance and accessibility.",
-      liveLink: "https://react-ecommerce-project-475w.vercel.app/",
-      repoLink: "https://github.com/Deepak-thakur-321/react-ecommerce-project",
-      category: "Web App",
-      tech: ["React", "TailwindCSS", "Context API", "Router"],
-      year: 2025,
-   },
-   {
-      title: "Expense Tracker",
-      description:
-         "Track expenses by category with charts, persistent storage, and monthly insights.",
-      liveLink: "https://expense-tracker-pied-nu.vercel.app/",
-      repoLink: "https://github.com/Deepak-thakur-321/expense-tracker",
-      category: "Web App",
-      tech: ["React", "LocalStorage", "Charts"],
-      year: 2025,
-   },
-   {
-      title: "Restaurant Website",
-      description:
-         "Premium restaurant landing with menu, reservation form, hero animations, and responsive layout.",
-      liveLink: "https://indian-delecious-restaurant.vercel.app/",
-      repoLink: "https://github.com/Deepak-thakur-321/Delicious-Restaurant",
-      category: "Landing Page",
-      tech: ["React", "TailwindCSS", "GSAP"],
-      year: 2025,
-   },
-   {
-      title: "Gaming Website",
+      title: "Xsports (Gaming Site)",
       description:
          "Interactive gaming front‑end with hover cards, match listings, and animated sections.",
       liveLink: "https://tailwind-gaming-website.vercel.app/",
@@ -71,6 +33,7 @@ const projectsData = [
       category: "Landing Page",
       tech: ["React", "TailwindCSS", "GSAP"],
       year: 2025,
+      priority: 3,
    },
    {
       title: "Apple Landing Page",
@@ -81,6 +44,51 @@ const projectsData = [
       category: "Landing Page",
       tech: ["React", "TailwindCSS"],
       year: 2024,
+      priority: 4,
+   },
+   {
+      title: "Restaurant Website",
+      description:
+         "Premium restaurant landing with menu, reservation form, hero animations, and responsive layout.",
+      liveLink: "https://indian-delecious-restaurant.vercel.app/",
+      repoLink: "https://github.com/Deepak-thakur-321/Delicious-Restaurant",
+      category: "Landing Page",
+      tech: ["React", "TailwindCSS", "GSAP"],
+      year: 2025,
+      priority: 5,
+   },
+   {
+      title: "E‑commerce Landing Page",
+      description:
+         "Full‑stack style front‑end with product gallery, filters, cart, and checkout flow. Focus on performance and accessibility.",
+      liveLink: "https://react-ecommerce-project-475w.vercel.app/",
+      repoLink: "https://github.com/Deepak-thakur-321/react-ecommerce-project",
+      category: "Web App",
+      tech: ["React", "TailwindCSS", "Context API", "Router"],
+      year: 2025,
+      priority: 6,
+   },
+   {
+      title: "Job Application Tracker",
+      description:
+         "A simple tracker to manage job applications with filters, statuses, and progress tracking.",
+      liveLink: "https://job-application-tracker-virid.vercel.app/",
+      repoLink: "https://github.com/Deepak-thakur-321/Job-Application-Tracker",
+      category: "Productivity Tool",
+      tech: ["React", "Tailwind", "LocalStorage / MongoDB"],
+      year: 2025,
+      priority: 7,
+   },
+   {
+      title: "Expense Tracker",
+      description:
+         "Track expenses by category with charts, persistent storage, and monthly insights.",
+      liveLink: "https://expense-tracker-pied-nu.vercel.app/",
+      repoLink: "https://github.com/Deepak-thakur-321/expense-tracker",
+      category: "Web App",
+      tech: ["React", "LocalStorage", "Charts"],
+      year: 2025,
+      priority: 8,
    },
    {
       title: "Task Tracker",
@@ -91,6 +99,7 @@ const projectsData = [
       category: "Web App",
       tech: ["React", "TailwindCSS"],
       year: 2024,
+      priority: 9,
    },
    {
       title: "Bookmark Extension",
@@ -101,6 +110,7 @@ const projectsData = [
       category: "Browser Extension",
       tech: ["JavaScript", "Chrome APIs"],
       year: 2024,
+      priority: 10,
    },
    {
       title: "Notes App",
@@ -111,9 +121,8 @@ const projectsData = [
       category: "Web App",
       tech: ["React", "LocalStorage"],
       year: 2024,
+      priority: 11,
    },
-
-
 ];
 
 const categories = ["All", "Web App", "Landing Page", "Browser Extension"];
@@ -125,12 +134,40 @@ function classNames(...c) {
 const Projects = () => {
    const [query, setQuery] = useState("");
    const [category, setCategory] = useState("All");
-   const [sortBy, setSortBy] = useState("Newest");
+   const [sortBy, setSortBy] = useState("Featured");
+   const [isLoading, setIsLoading] = useState(true);
+   const [visibleCards, setVisibleCards] = useState(new Set());
+   const observerRef = useRef(null);
+
+   useEffect(() => {
+      // Simulate loading
+      const timer = setTimeout(() => setIsLoading(false), 100);
+      return () => clearTimeout(timer);
+   }, []);
+
+   useEffect(() => {
+      // Intersection Observer for scroll animations
+      observerRef.current = new IntersectionObserver(
+         (entries) => {
+            entries.forEach((entry) => {
+               if (entry.isIntersecting) {
+                  setVisibleCards((prev) => new Set([...prev, entry.target.dataset.index]));
+               }
+            });
+         },
+         { threshold: 0.1 }
+      );
+
+      return () => {
+         if (observerRef.current) {
+            observerRef.current.disconnect();
+         }
+      };
+   }, []);
 
    const filtered = useMemo(() => {
       let list = [...projectsData];
 
-      // Search
       if (query.trim()) {
          const q = query.toLowerCase();
          list = list.filter(
@@ -141,12 +178,11 @@ const Projects = () => {
          );
       }
 
-      // Category
       if (category !== "All") {
          list = list.filter((p) => p.category === category);
       }
 
-      // Sort
+      if (sortBy === "Featured") list.sort((a, b) => a.priority - b.priority);
       if (sortBy === "Newest") list.sort((a, b) => b.year - a.year || a.title.localeCompare(b.title));
       if (sortBy === "Oldest") list.sort((a, b) => a.year - b.year || a.title.localeCompare(b.title));
       if (sortBy === "A‑Z") list.sort((a, b) => a.title.localeCompare(b.title));
@@ -154,11 +190,31 @@ const Projects = () => {
       return list;
    }, [query, category, sortBy]);
 
+   const cardRef = (el, idx) => {
+      if (el && observerRef.current) {
+         observerRef.current.observe(el);
+      }
+   };
+
+   if (isLoading) {
+      return (
+         <section className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 px-6 py-20 flex items-center justify-center">
+            <div className="text-center">
+               <div className="relative w-20 h-20 mx-auto mb-6">
+                  <div className="absolute inset-0 border-4 border-blue-200 rounded-full animate-ping"></div>
+                  <div className="absolute inset-0 border-4 border-t-blue-600 rounded-full animate-spin"></div>
+               </div>
+               <p className="text-slate-600 text-lg font-medium animate-pulse">Loading Projects...</p>
+            </div>
+         </section>
+      );
+   }
+
    return (
       <section className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 px-6 py-20">
          <div className="container mx-auto">
             {/* Heading */}
-            <div className="text-center mb-10">
+            <div className="text-center mb-10 animate-fade-in-down">
                <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900">
                   <span className="bg-gradient-to-r from-blue-700 to-indigo-600 bg-clip-text text-transparent">
                      Projects
@@ -170,32 +226,33 @@ const Projects = () => {
             </div>
 
             {/* Controls */}
-            <div className="grid grid-cols-12 gap-4 items-center mb-8">
+            <div className="grid grid-cols-12 gap-4 items-center mb-8 animate-fade-in-down" style={{ animationDelay: '0.1s' }}>
                {/* Search */}
                <div className="col-span-12 md:col-span-6 lg:col-span-5">
-                  <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-2 shadow-sm">
-                     <FaSearch className="opacity-70" />
+                  <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-2 shadow-sm hover:shadow-md transition-all duration-300 hover:border-blue-300">
+                     <FaSearch className="opacity-70 text-blue-600" />
                      <input
                         type="text"
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                         placeholder="Search by title, tech, or description..."
-                        className="w-full outline-none text-slate-700 placeholder:slae-400"
+                        className="w-full outline-none text-slate-700 placeholder:slate-400"
                      />
                   </div>
                </div>
 
                {/* Category pills */}
                <div className="col-span-12 md:col-span-6 lg:col-span-5 flex flex-wrap gap-2">
-                  {categories.map((c) => (
+                  {categories.map((c, idx) => (
                      <button
                         key={c}
                         onClick={() => setCategory(c)}
+                        style={{ animationDelay: `${0.2 + idx * 0.05}s` }}
                         className={classNames(
-                           "px-4 py-2 rounded-full text-sm border transition-all",
+                           "px-4 py-2 rounded-full text-sm border transition-all duration-300 transform hover:scale-105 animate-scale-in",
                            category === c
-                              ? "bg-blue-600 text-white border-blue-600 shadow"
-                              : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
+                              ? "bg-blue-600 text-white border-blue-600 shadow-lg shadow-blue-200"
+                              : "bg-white text-slate-700 border-slate-200 hover:border-blue-300 hover:bg-blue-50"
                         )}
                      >
                         {c}
@@ -205,20 +262,20 @@ const Projects = () => {
 
                {/* Sort */}
                <div className="col-span-12 lg:col-span-2 flex justify-start lg:justify-end">
-                  <div className="flex items-center gap-2 border border-slate-300/60 bg-white px-3 py-2 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                  <div className="flex items-center gap-2 border border-slate-300/60 bg-white px-3 py-2 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 hover:border-blue-300">
                      <FaFilter className="text-slate-500" />
                      <select
                         value={sortBy}
                         onChange={(e) => setSortBy(e.target.value)}
                         className="bg-transparent outline-none text-slate-700 font-medium cursor-pointer focus:text-slate-900"
                      >
-                        <option value="newest">Newest</option>
-                        <option value="oldest">Oldest</option>
-                        <option value="az">A-Z</option>
+                        <option value="Featured">Featured</option>
+                        <option value="Newest">Newest</option>
+                        <option value="Oldest">Oldest</option>
+                        <option value="A‑Z">A-Z</option>
                      </select>
                   </div>
                </div>
-
             </div>
 
             {/* Grid */}
@@ -226,23 +283,39 @@ const Projects = () => {
                {filtered.map((project, idx) => (
                   <article
                      key={idx}
-                     className="col-span-12 sm:col-span-6 lg:col-span-4 group relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-lg transition-shadow"
+                     ref={(el) => cardRef(el, idx)}
+                     data-index={idx}
+                     className={classNames(
+                        "col-span-12 sm:col-span-6 lg:col-span-4 group relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm hover-lift",
+                        visibleCards.has(String(idx)) ? "card-visible" : "card-hidden"
+                     )}
+                     style={{ animationDelay: `${(idx % 3) * 0.1}s` }}
                   >
-                     {/* Decorative gradient */}
-                     <div className="absolute inset-x-0 -top-24 h-40 bg-gradient-to-r from-blue-500/10 via-indigo-500/10 to-fuchsia-500/10 blur-2xl" />
+
+                     {/* Decorative gradient with hover effect */}
+                     <div className="absolute inset-x-0 -top-24 h-40 bg-gradient-to-r from-blue-500/10 via-indigo-500/10 to-fuchsia-500/10 blur-2xl group-hover:blur-3xl transition-all duration-500" />
+
+                     {/* Shimmer effect on hover */}
+                     <div className="absolute inset-0 shimmer-effect opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+
+                     {/* Glowing border on hover */}
+                     <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-r from-blue-500/20 via-indigo-500/20 to-fuchsia-500/20 blur-xl -z-10" />
 
                      <div className="relative p-6">
-                        <h3 className="text-xl font-bold text-slate-900 group-hover:text-blue-700 transition-colors">
+                        <h3 className="text-xl font-bold text-slate-900 group-hover:text-blue-700 transition-all duration-300 group-hover:translate-x-1">
                            {project.title}
                         </h3>
-                        <p className="mt-2 text-slate-600 min-h-[72px]">{project.description}</p>
+                        <p className="mt-2 text-slate-600 min-h-[72px] group-hover:text-slate-700 transition-colors duration-300">
+                           {project.description}
+                        </p>
 
                         {/* Tags */}
                         <div className="mt-4 flex flex-wrap gap-2">
-                           {project.tech?.map((t) => (
+                           {project.tech?.map((t, tidx) => (
                               <span
                                  key={t}
-                                 className="px-2.5 py-1 rounded-full text-xs bg-slate-100 text-slate-700 border border-slate-200"
+                                 className="px-2.5 py-1 rounded-full text-xs bg-slate-100 text-slate-700 border border-slate-200 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-700 transition-all duration-300 hover:scale-105 transform"
+                                 style={{ transitionDelay: `${tidx * 30}ms` }}
                               >
                                  {t}
                               </span>
@@ -251,7 +324,9 @@ const Projects = () => {
 
                         {/* Footer */}
                         <div className="mt-6 flex items-center justify-between">
-                           <span className="text-xs font-medium text-slate-500">{project.category} • {project.year}</span>
+                           <span className="text-xs font-medium text-slate-500 group-hover:text-slate-700 transition-colors duration-300">
+                              {project.category} • {project.year}
+                           </span>
 
                            <div className="flex gap-2">
                               {project.repoLink && (
@@ -259,10 +334,10 @@ const Projects = () => {
                                     href={project.repoLink}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 text-sm"
+                                    className="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 text-sm transition-all duration-300 hover:shadow-md transform hover:-translate-y-0.5"
                                     aria-label={`Open repository of ${project.title}`}
                                  >
-                                    <FaGithub />
+                                    <FaGithub className="transition-transform duration-300 group-hover:rotate-12" />
                                     Code
                                  </a>
                               )}
@@ -271,10 +346,10 @@ const Projects = () => {
                                     href={project.liveLink}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 text-sm"
+                                    className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 text-sm transition-all duration-300 hover:shadow-lg hover:shadow-blue-200 transform hover:-translate-y-0.5"
                                     aria-label={`Visit live demo of ${project.title}`}
                                  >
-                                    <FaExternalLinkAlt />
+                                    <FaExternalLinkAlt className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                                     Live
                                  </a>
                               ) : (
