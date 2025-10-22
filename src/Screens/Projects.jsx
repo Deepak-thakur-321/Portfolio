@@ -190,7 +190,7 @@ const Projects = () => {
       return list;
    }, [query, category, sortBy]);
 
-   const cardRef = (el, idx) => {
+   const cardRef = (el) => {
       if (el && observerRef.current) {
          observerRef.current.observe(el);
       }

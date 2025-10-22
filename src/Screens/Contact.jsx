@@ -11,42 +11,47 @@ const Contact = () => {
    } = useForm();
 
    const formHandler = (data) => {
-      const existingData =
-         JSON.parse(localStorage.getItem("contactFormData")) || [];
+      const existingData = JSON.parse(localStorage.getItem("contactFormData")) || [];
       const updatedData = [...existingData, data];
       localStorage.setItem("contactFormData", JSON.stringify(updatedData));
       reset();
    };
 
    return (
-      <section className="min-h-screen py-16 px-4 bg-gray-900 flex items-center justify-center">
-         <div className="max-w-6xl w-full grid lg:grid-cols-2 gap-10">
+      <section className="min-h-screen mt-10 flex items-center justify-center px-6 bg-gradient-to-br from-[#142a73] via-[#b7c4e9] to-[#30324a] text-white overflow-hidden relative">
+         {/* floating glow background */}
+         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(58,89,255,0.15),transparent_60%),radial-gradient(circle_at_80%_70%,rgba(0,255,255,0.1),transparent_60%)] pointer-events-none"></div>
+
+         <div className="relative z-10 max-w-6xl w-full grid lg:grid-cols-2 gap-10 animate-fadeUp">
             {/* Contact Info */}
-            <div className="flex flex-col justify-center space-y-6 text-white">
-               <h2 className="text-4xl font-bold">Get in Touch</h2>
-               <p className="text-gray-300">
+            <div className="flex flex-col justify-center space-y-6 text-2xl">
+               <h2 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">
+                  Get in Touch
+               </h2>
+               <p className="text-gray-300 leading-relaxed">
                   I’m open to full-time opportunities, collaborations, and interesting
                   projects. Feel free to drop a message.
                </p>
 
-               <div className="space-y-4">
+               <div className="space-y-4 text-xl   ">
                   <div className="flex items-center gap-3">
-                     <FaEnvelope className="text-blue-500 text-xl" />
-                     <span>deepakthakur17756@gmail.com</span>
+                     <FaEnvelope className="text-blue-400 text-lg" />
+                     <span>deepakthakur.codr@gmail.com</span>
                   </div>
                   <div className="flex items-center gap-3">
-                     <FaPhoneAlt className="text-green-500 text-xl" />
+                     <FaPhoneAlt className="text-green-400 text-lg" />
                      <span>+91 8375919101</span>
                   </div>
                   <div className="flex items-center gap-3">
-                     <FaMapMarkerAlt className="text-red-500 text-xl" />
+                     <FaMapMarkerAlt className="text-pink-400 text-lg" />
                      <span>New Delhi</span>
                   </div>
                </div>
             </div>
 
             {/* Contact Form */}
-            <div className="bg-gray-800 p-8 rounded-2xl shadow-2xl border border-gray-700">
+            <div className="bg-gradient-to-br from-slate-900/80 via-blue-950/70 to-indigo-900/70
+ p-8 rounded-2xl border border-gray-700/50 shadow-2xl backdrop-blur-md animate-fadeUp [animation-delay:0.2s]">
                <form onSubmit={handleSubmit(formHandler)} className="space-y-5">
                   <div className="flex flex-col">
                      <label className="mb-1 text-gray-300 font-medium">Full Name</label>
@@ -54,7 +59,7 @@ const Contact = () => {
                         {...register("name", { required: "Name is Required" })}
                         type="text"
                         placeholder="Enter your name"
-                        className="px-4 py-3 rounded-lg bg-gray-700 border border-gray-600 text-white focus:outline-none focus:border-blue-500 transition"
+                        className="px-4 py-3 rounded-lg bg-gray-800 border border-gray-600 text-white focus:outline-none focus:border-blue-500 transition"
                      />
                      {errors.name && (
                         <p className="text-red-500 text-sm">{errors.name.message}</p>
@@ -67,7 +72,7 @@ const Contact = () => {
                         {...register("email", { required: "Email is Required" })}
                         type="email"
                         placeholder="Enter your email"
-                        className="px-4 py-3 rounded-lg bg-gray-700 border border-gray-600 text-white focus:outline-none focus:border-blue-500 transition"
+                        className="px-4 py-3 rounded-lg bg-gray-800 border border-gray-600 text-white focus:outline-none focus:border-blue-500 transition"
                      />
                      {errors.email && (
                         <p className="text-red-500 text-sm">{errors.email.message}</p>
@@ -75,7 +80,9 @@ const Contact = () => {
                   </div>
 
                   <div className="flex flex-col">
-                     <label className="mb-1 text-gray-300 font-medium">Mobile Number</label>
+                     <label className="mb-1 text-gray-300 font-medium">
+                        Mobile Number
+                     </label>
                      <input
                         {...register("mobileNumber", {
                            required: "Mobile number is required",
@@ -85,8 +92,8 @@ const Contact = () => {
                            },
                         })}
                         type="text"
-                        placeholder="Enter Your Mobile"
-                        className="px-4 py-3 rounded-lg bg-gray-700 border border-gray-600 text-white focus:outline-none focus:border-blue-500 transition"
+                        placeholder="Enter your mobile"
+                        className="px-4 py-3 rounded-lg bg-gray-800 border border-gray-600 text-white focus:outline-none focus:border-blue-500 transition"
                      />
                      {errors.mobileNumber && (
                         <p className="text-red-500 text-sm">
@@ -101,7 +108,7 @@ const Contact = () => {
                         {...register("city", { required: "City is Required" })}
                         type="text"
                         placeholder="Enter your city"
-                        className="px-4 py-3 rounded-lg bg-gray-700 border border-gray-600 text-white focus:outline-none focus:border-blue-500 transition"
+                        className="px-4 py-3 rounded-lg bg-gray-800 border border-gray-600 text-white focus:outline-none focus:border-blue-500 transition"
                      />
                      {errors.city && (
                         <p className="text-red-500 text-sm">{errors.city.message}</p>
@@ -110,7 +117,7 @@ const Contact = () => {
 
                   <button
                      type="submit"
-                     className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition duration-300"
+                     className="w-full bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-semibold py-3 rounded-lg transition duration-300"
                   >
                      Send Message
                   </button>
