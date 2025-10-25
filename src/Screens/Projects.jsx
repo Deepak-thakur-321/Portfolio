@@ -36,6 +36,17 @@ const projectsData = [
       priority: 3,
    },
    {
+      title: "E‑commerce Landing Page",
+      description:
+         "Full‑stack style front‑end with product gallery, filters, cart, and checkout flow. Focus on performance and accessibility.",
+      liveLink: "https://fashion-commece.vercel.app/",
+      repoLink: "https://github.com/Deepak-thakur-321/react-ecommerce-project",
+      category: "Web App",
+      tech: ["React", "TailwindCSS", "Context API", "Router"],
+      year: 2025,
+      priority: 4,
+   },
+   {
       title: "Apple Landing Page",
       description:
          "Minimal, Apple‑style product hero with sticky highlights and smooth scroll sections.",
@@ -44,7 +55,7 @@ const projectsData = [
       category: "Landing Page",
       tech: ["React", "TailwindCSS"],
       year: 2024,
-      priority: 4,
+      priority: 5,
    },
    {
       title: "Restaurant Website",
@@ -54,17 +65,6 @@ const projectsData = [
       repoLink: "https://github.com/Deepak-thakur-321/Delicious-Restaurant",
       category: "Landing Page",
       tech: ["React", "TailwindCSS", "GSAP"],
-      year: 2025,
-      priority: 5,
-   },
-   {
-      title: "E‑commerce Landing Page",
-      description:
-         "Full‑stack style front‑end with product gallery, filters, cart, and checkout flow. Focus on performance and accessibility.",
-      liveLink: "https://react-ecommerce-project-475w.vercel.app/",
-      repoLink: "https://github.com/Deepak-thakur-321/react-ecommerce-project",
-      category: "Web App",
-      tech: ["React", "TailwindCSS", "Context API", "Router"],
       year: 2025,
       priority: 6,
    },
