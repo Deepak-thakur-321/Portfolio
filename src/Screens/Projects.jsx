@@ -36,13 +36,13 @@ const projectsData = [
       priority: 3,
    },
    {
-      title: "E‑commerce Landing Page",
+      title: "Fashion Commerce",
       description:
-         "Full‑stack style front‑end with product gallery, filters, cart, and checkout flow. Focus on performance and accessibility.",
-      liveLink: "https://fashion-commece.vercel.app/",
+         "Full‑stack style front‑end with product gallery, filters, cart, and checkout flow. Focus on performance and accessibility with Best rich look UI interface.",
+      liveLink: "https://fashion-commerce-nine.vercel.app/",
       repoLink: "https://github.com/Deepak-thakur-321/react-ecommerce-project",
       category: "Web App",
-      tech: ["React", "TailwindCSS", "Context API", "Router"],
+      tech: ["React", "TailwindCSS", "Context API", "Router", "Redux"],
       year: 2025,
       priority: 4,
    },
